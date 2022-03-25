@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import Firebase
 
 class SingUpController: UIViewController {
     
@@ -68,6 +69,7 @@ class SingUpController: UIViewController {
         let button = AuthButton(type: .system)
         button.setTitle("Sing Up", for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(handleSingUp), for: .touchUpInside)
         return button
     }()
     
@@ -91,6 +93,32 @@ class SingUpController: UIViewController {
     }
     
     // MARK: - Selectors
+    
+    @objc func handleSingUp() {
+        guard let email = emailTextField.text else { return }
+        guard let password = passwordTextField.text else {return}
+        guard let fullname = fullnameTextField.text else {return}
+         let accountTypeIndex = accountTypeSegmentedControl.selectedSegmentIndex
+      
+        
+        Auth.auth().createUser(withEmail: email, password: password) { (result, error) in
+            if let error = error {
+                print("Failed to register user with error \(error)")
+                return
+            }
+            
+            guard let uid = result?.user.uid else {return}
+            
+            let values = ["email": email,
+                          "fullname": fullname,
+                          "accountType": accountTypeIndex] as [String : Any]
+            
+            Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
+                print("Succsessfully registred user and saved data")
+            }
+        }
+    }
+    
     @objc func handleShowLogIn() {
         navigationController?.popViewController(animated: true)
     }
