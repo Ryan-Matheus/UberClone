@@ -22,8 +22,8 @@ class HomeController: UIViewController {
         super.viewDidLoad()
         checkIfUserIsLoggedIn()
         enableLocationServices(locationManager)
-//        signOut()
-         
+        //        signOut()
+        
     }
     
     //MARK: - API
@@ -59,40 +59,37 @@ class HomeController: UIViewController {
 }
 
 
- // MARK: - LocationServices
-private extension HomeController {
-
-func enableLocationServices(_ manager: CLLocationManager) {
-
-switch manager.authorizationStatus {
-
-case .notDetermined:
-
-print("DEBUG: Not determined..")
-
-manager.requestWhenInUseAuthorization()
-
-case .restricted:
-
-break
-
-case .denied:
-
-break
-
-case .authorizedAlways:
-
-print("DEBUG: Auth always..")
-
-case .authorizedWhenInUse:
-
-print("DEBUG: Auth when in use..")
-
-@unknown default:
-
-print("DEBUG: unknown default..")
-    enableLocationServices(locationManager)
-    
+// MARK: - LocationServices
+extension HomeController {
+    func enableLocationServices(_ manager: CLLocationManager) {
+        locationManager.delegate.self
+        
+        switch CLLocationManager.authorizationStatus() {
+        case .notDetermined:
+            print("DEBUG: Not determined..")
+            locationManager.requestWhenInUseAuthorization()
+        case .restricted:
+            break
+        case .denied:
+            break
+        case .authorizedAlways:
+            print("DEBUG: Auth always..")
+            locationManager.startUpdatingLocation()
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest
+        case .authorizedWhenInUse:
+            print("DEBUG: Auth when in use..")
+            locationManager.requestAlwaysAuthorization()
+        @unknown default:
+            print("DEBUG: unknown default..")
+            
+            
+        }
+    }
+    func locationManager(_ manager: CLLocationManager, didChangeAuthorization status:
+                         CLAuthorizationStatus) {
+        
+        if status == .authorizedWhenInUse {
+            locationManager.requestAlwaysAuthorization()
         }
     }
 }
