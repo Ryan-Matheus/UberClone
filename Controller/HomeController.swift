@@ -14,12 +14,14 @@ class HomeController: UIViewController {
     // MARK: - Properties
     
     private let mapView = MKMapView()
+    private let locationManager = CLLocationManager()
     
     // MARK: - Lifecycle
     
     override func viewDidLoad() {
         super.viewDidLoad()
         checkIfUserIsLoggedIn()
+        enableLocationServices(locationManager)
 //        signOut()
          
     }
@@ -48,8 +50,50 @@ class HomeController: UIViewController {
     
     // MARK: - Helper Functions
     
+    
+    
     func configureUI() {
         view.addSubview(mapView)
         mapView.frame = view.frame
     }
 }
+
+
+ // MARK: - LocationServices
+private extension HomeController {
+
+func enableLocationServices(_ manager: CLLocationManager) {
+
+switch manager.authorizationStatus {
+
+case .notDetermined:
+
+print("DEBUG: Not determined..")
+
+manager.requestWhenInUseAuthorization()
+
+case .restricted:
+
+break
+
+case .denied:
+
+break
+
+case .authorizedAlways:
+
+print("DEBUG: Auth always..")
+
+case .authorizedWhenInUse:
+
+print("DEBUG: Auth when in use..")
+
+@unknown default:
+
+print("DEBUG: unknown default..")
+    enableLocationServices(locationManager)
+    
+        }
+    }
+}
+
