@@ -62,6 +62,7 @@ class HomeController: UIViewController {
         inputActivationView.setDimensions(height: 50, width: view.frame.width - 64)
         inputActivationView.anchor(top: view.safeAreaLayoutGuide.topAnchor, paddingTop: 32)
         inputActivationView.alpha = 0
+        inputActivationView.delegate = self
         
         UIView.animate(withDuration: 2) {
             self.inputActivationView.alpha = 1
@@ -114,7 +115,7 @@ extension HomeController: CLLocationManagerDelegate {
 
 extension HomeController: LocationInputActivationViewDelegate{
     func presentLocationInputView() {
-        <#code#>
+        print("DEBUG: Handle present location input view")
     }
 }
 
