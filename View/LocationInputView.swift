@@ -25,6 +25,8 @@ class LocationInputView: UIView {
         
         addShadow()
         
+        backgroundColor = .white
+        
         addSubview(backButton)
         backButton.anchor(top: topAnchor, left: leftAnchor, paddingTop: 44, paddingLeft: 44, width: 24, height: 25)
     }
