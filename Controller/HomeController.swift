@@ -79,6 +79,7 @@ class HomeController: UIViewController {
     }
     
     func configureLocationInputView() {
+        locationInputView.delegate = self
         view.addSubview(locationInputView)
         locationInputView.anchor(top: view.topAnchor, left: view.leftAnchor, right: view.rightAnchor, height: 200)
         locationInputView.alpha = 0
@@ -128,11 +129,27 @@ extension HomeController: CLLocationManagerDelegate {
     }
 }
 
+// MARK: - LocationInputActivationViewDelegate
+
 extension HomeController: LocationInputActivationViewDelegate{
     func presentLocationInputView() {
         inputActivationView.alpha = 0
         configureLocationInputView()
         
     }
+}
+
+// MARK: - LocationInputViewDelegate
+
+extension HomeController: LocationInputViewDelegate {
+    func dismissLocationInputView() {
+        UIView.animate(withDuration: 0.3, animations:{ self.locationInputView.alpha = 0
+            
+        }) {_  in
+            UIView.animate(withDuration: <#T##TimeInterval#>, animations: <#T##() -> Void#>)
+        }
+    }
+    
+    
 }
 

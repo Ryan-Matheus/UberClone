@@ -7,9 +7,15 @@
 
 import UIKit
 
+protocol LocationInputViewDelegate: class {
+    func dismissLocationInputView()
+}
+
 class LocationInputView: UIView {
 
     // MARK: - Properties
+    
+    weak var delegate: LocationInputViewDelegate?
     
     let backButton: UIButton = {
         let button = UIButton(type: .system)
@@ -38,7 +44,7 @@ class LocationInputView: UIView {
     // MARK: - Selectors
     
     @objc func handleBackTapped() {
-        print("DEBUG: Handle back..")
+        delegate?.dismissLocationInputView()
     }
 
 }
