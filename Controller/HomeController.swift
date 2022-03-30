@@ -146,7 +146,9 @@ extension HomeController: LocationInputViewDelegate {
         UIView.animate(withDuration: 0.3, animations:{ self.locationInputView.alpha = 0
             
         }) {_  in
-            UIView.animate(withDuration: <#T##TimeInterval#>, animations: <#T##() -> Void#>)
+            UIView.animate(withDuration: 0.3, animations: {
+                self.inputActivationView.alpha = 1
+            })
         }
     }
     
