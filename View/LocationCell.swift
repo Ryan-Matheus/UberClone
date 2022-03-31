@@ -32,6 +32,8 @@ class LocationCell: UITableViewCell {
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         
+        selectionStyle = .none 
+        
         let stack = UIStackView(arrangedSubviews: [titleLabel, addressLabel])
         stack.distribution = .fillEqually
         stack.axis = .vertical
