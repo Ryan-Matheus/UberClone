@@ -94,7 +94,8 @@ class HomeController: UIViewController {
         UIView.animate(withDuration: 0.5, animations: {
             self.locationInputView.alpha = 1
         }) { _ in
-            print("DEBUG: Present table view")
+            UIView.animate(withDuration: 0.3, animations:    {         self.tableView.frame.origin.y = self.locationInputViewHeight
+            })
         }
     }
     
@@ -122,7 +123,7 @@ class HomeController: UIViewController {
 extension HomeController: CLLocationManagerDelegate {
     func enableLocationServices() {
         locationManager.delegate = self
-   
+        
         
         switch CLLocationManager.authorizationStatus() {
         case .notDetermined:
@@ -138,7 +139,7 @@ extension HomeController: CLLocationManagerDelegate {
             print("DEBUG: Auth when in use..")
             locationManager.requestAlwaysAuthorization()
         @unknown default:
-           break
+            break
             
             
         }
@@ -166,7 +167,10 @@ extension HomeController: LocationInputActivationViewDelegate{
 
 extension HomeController: LocationInputViewDelegate {
     func dismissLocationInputView() {
+        locationInputView.removeFromSuperview()
+        
         UIView.animate(withDuration: 0.3, animations:{ self.locationInputView.alpha = 0
+            self.tableView.frame.origin.y = self.view.frame.height
             
         }) {_  in
             UIView.animate(withDuration: 0.3, animations: {
