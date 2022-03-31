@@ -73,6 +73,8 @@ class HomeController: UIViewController {
         UIView.animate(withDuration: 2) {
             self.inputActivationView.alpha = 1
         }
+        
+        configureTableView()
     }
     
     func configureMapView() {
@@ -106,6 +108,9 @@ class HomeController: UIViewController {
         let height = view.frame.height - locationInputViewHeight
         tableView.frame = CGRect(x: 0, y: view.frame.height,
                                  width: view.frame.width, height: height)
+        
+        
+        view.addSubview(tableView)
         
     }
 }
