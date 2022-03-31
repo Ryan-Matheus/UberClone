@@ -167,13 +167,13 @@ extension HomeController: LocationInputActivationViewDelegate{
 
 extension HomeController: LocationInputViewDelegate {
     func dismissLocationInputView() {
-        locationInputView.removeFromSuperview()
-        
         UIView.animate(withDuration: 0.3, animations:{ self.locationInputView.alpha = 0
             self.tableView.frame.origin.y = self.view.frame.height
             
         }) {_  in
             UIView.animate(withDuration: 0.3, animations: {
+                self.locationInputView.removeFromSuperview()
+
                 self.inputActivationView.alpha = 1
             })
         }
