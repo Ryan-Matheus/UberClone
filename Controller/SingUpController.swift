@@ -7,10 +7,14 @@
 
 import UIKit
 import Firebase
+import GeoFire
 
 class SingUpController: UIViewController {
     
     // MARK: - Properties
+    
+    private var location = LocationHandler.shared.locationManager.location
+
     
     private let titleLabel: UILabel = {
         let label = UILabel()
@@ -88,8 +92,8 @@ class SingUpController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         configureUI()
+        
     }
     
     // MARK: - Selectors
@@ -113,11 +117,16 @@ class SingUpController: UIViewController {
                           "fullname": fullname,
                           "accountType": accountTypeIndex] as [String : Any]
             
-            Database.database().reference().child("users").child(uid).updateChildValues(values) { (error, ref) in
-               
-                guard let  controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
-                controller.configureUI()
-                self.dismiss(animated: true, completion: nil)            }
+            if accountTypeIndex == 1 {
+                let geofire = GeoFire(firebaseRef: REF_DRIVER_LOCATIONS)
+                guard let location = self.location else {return}
+                
+        geofire.setLocation(location, forKey: uid, withCompletionBlock:{ (error) in
+            self.uploadUserDataAndShowHomeController(uid: uid, values: values)
+        })
+    }
+            self.uploadUserDataAndShowHomeController(uid: uid, values: values)
+            
         }
     }
     
@@ -126,6 +135,13 @@ class SingUpController: UIViewController {
     }
     
     //MARK: - Helper functions
+    
+    func uploadUserDataAndShowHomeController(uid: String, values: [String: Any]) {
+        REF_USERS.child("users").child(uid).updateChildValues(values) { (error, ref) in
+            guard let  controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
+            controller.configureUI()
+            self.dismiss(animated: true, completion: nil) }
+    }
     
     func configureUI() {
         
