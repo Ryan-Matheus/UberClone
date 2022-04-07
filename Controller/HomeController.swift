@@ -35,15 +35,30 @@ class HomeController: UIViewController {
         checkIfUserIsLoggedIn()
         enableLocationServices()
         fetchUserData()
-               signOut()
+        fetchDrivers()
+       
+       
+    
         
     }
     
     //MARK: - API
     
     func fetchUserData() {
-        Service.shared.fetchUserData { user in
+        guard let currentUid = Auth.auth().currentUser?.uid else { return }
+        Service.shared.fetchUserData(uid: currentUid) { user in
             self.user = user
+        }
+    }
+  
+    
+    func fetchDrivers() {
+        guard let location = locationManager?.location else { return }
+        Service.shared.fetchDrivers(location: location) { (driver) in
+            guard let coordinate = driver.location?.coordinate else {return}
+            let annotation = DriverAnnotation(uid: driver.uid, coordinate: coordinate)
+            
+            self.mapView.addAnnotation(annotation)
         }
     }
     

@@ -137,11 +137,11 @@ class SingUpController: UIViewController {
     //MARK: - Helper functions
     
     func uploadUserDataAndShowHomeController(uid: String, values: [String: Any]) {
-        REF_USERS.child("users").child(uid).updateChildValues(values) { (error, ref) in
+        REF_USERS.child(uid).updateChildValues(values, withCompletionBlock: { (error, ref)  in
             guard let  controller = UIApplication.shared.keyWindow?.rootViewController as? HomeController else { return }
             controller.configureUI()
             self.dismiss(animated: true, completion: nil) }
-    }
+    )}
     
     func configureUI() {
         
